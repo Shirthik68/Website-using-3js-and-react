@@ -3,8 +3,11 @@ import { Canvas } from "@react-three/fiber";
 import { useMediaQuery } from "react-responsive";
 import CanvasLoader from "../Components/CanvasLoader";
 import HackerRoom from "../Components/HackerRoom";
-import Target from "../Components/Target";
-import { OrbitControls } from "@react-three/drei";
+import Target from '../Components/Target';
+import ReactLogo from "../Components/Reactlogo";
+import Cube from "../Components/Cube";
+import Rings from "../Components/Rings";
+
 
 // Responsive scaling and positioning
 const calculateSizes = (isSmall, isMobile, isTablet) => {
@@ -13,27 +16,40 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
       deskScale: 0.05,
       deskPosition: [0, -5, -10],
       targetPosition: [0, -1.5, 0],
+      ReactLogoPosition: [-2, 1, 0],
+      CubePosition: [0, 1, 1],
+      RingsPosition: [2, 1, 0]
     };
   } else if (isMobile) {
     return {
       deskScale: 0.06,
-      deskPosition: [1, -5, -10],
+      deskPosition: [1, -7, -10],
       targetPosition: [0, -1.5, 0],
+      ReactLogoPosition: [-2, 1, 0],
+      CubePosition: [0, 1, 1],
+      RingsPosition: [2, 1, 0]
     };
   } else if (isTablet) {
     return {
       deskScale: 0.07,
-      deskPosition: [1, -5, -10],
+      deskPosition: [1, -8, -10],
       targetPosition: [0, -1.5, 0],
+      ReactLogoPosition: [-2, 1, 0],
+      CubePosition: [0, 1, 1],
+      RingsPosition: [2, 1, 0]
     };
   } else {
     return {
-      deskScale: 0.08,
-      deskPosition: [1, -6, -10],
-      targetPosition: [0, -1.5, 0],
+      deskScale: 0.07,
+      deskPosition: [1, -8, -10],
+      targetPosition: [-2, -2, 1],
+      ReactLogoPosition: [0, 0, 0],
+      CubePosition: [2.5, -1, 1],
+      RingsPosition: [10, 1, 1]
     };
   }
 };
+
 
 const Hero = () => {
   const isSmall = useMediaQuery({ maxWidth: 440 });
@@ -72,9 +88,15 @@ const Hero = () => {
               rotation={[0.1, -Math.PI, 0]}
             />
 
-            <Target position={sizes.targetPosition} scale={[0.3, 0.3, 0.3]} />
+            <Target position={sizes.targetPosition} scale={[0.2, 0.2, 0.2]} />
 
-            <OrbitControls enableZoom={true} />
+            <ReactLogo position={sizes.ReactLogoPosition} scale={[0.3, 0.3, 0.3]} />
+
+            <Cube position={sizes.CubePosition} scale={[0.2, 0.2, 0.2]} />
+
+            <Rings position={sizes.RingsPosition} scale={[0.2, 0.2, 0.2]} />
+
+            
           </Suspense>
         </Canvas>
       </div>

@@ -6,6 +6,8 @@ const HackerRoom = ({ position, rotation, scale }) => {
   const monitortxt = useTexture('textures/desk/monitor.png');
   const screenTxt = useTexture('textures/desk/screen.png');
 
+
+
   return (
     <group position={position} rotation={rotation} scale={scale} dispose={null}>
       <mesh geometry={nodes.screen_screens_0.geometry} material={materials.screens}>
