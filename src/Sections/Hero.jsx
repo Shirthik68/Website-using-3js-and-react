@@ -2,11 +2,12 @@ import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useMediaQuery } from "react-responsive";
 import CanvasLoader from "../Components/CanvasLoader";
-import HackerRoom from "../Components/HackerRoom";
+//import HackerRoom from "../Components/HackerRoom";
 import Target from '../Components/Target';
 import ReactLogo from "../Components/Reactlogo";
 import Cube from "../Components/Cube";
 import Rings from "../Components/Rings";
+import Character from "../Components/Character";
 
 
 // Responsive scaling and positioning
@@ -18,7 +19,8 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
       targetPosition: [0, -1.5, 0],
       ReactLogoPosition: [-2, 1, 0],
       CubePosition: [0, 1, 1],
-      RingsPosition: [2, 1, 0]
+      RingsPosition: [2, 1, 0],
+      CharacterPosition: [0, 0, 0]
     };
   } else if (isMobile) {
     return {
@@ -27,7 +29,8 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
       targetPosition: [0, -1.5, 0],
       ReactLogoPosition: [-2, 1, 0],
       CubePosition: [0, 1, 1],
-      RingsPosition: [2, 1, 0]
+      RingsPosition: [2, 1, 0],
+      CharacterPosition: [0, 0, 0]
     };
   } else if (isTablet) {
     return {
@@ -36,7 +39,8 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
       targetPosition: [0, -1.5, 0],
       ReactLogoPosition: [-2, 1, 0],
       CubePosition: [0, 1, 1],
-      RingsPosition: [2, 1, 0]
+      RingsPosition: [2, 1, 0],
+      CharacterPosition: [0, 0, 0]
     };
   } else {
     return {
@@ -45,7 +49,8 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
       targetPosition: [-2, -2, 1],
       ReactLogoPosition: [0, 0, 0],
       CubePosition: [2.5, -1, 1],
-      RingsPosition: [10, 1, 1]
+      RingsPosition: [10, 10, 0],
+      CharacterPosition: [0, -1, 0]
     };
   }
 };
@@ -77,16 +82,16 @@ const Hero = () => {
 
       {/* 3D Canvas */}
       <div className="w-full h-full absolute inset-0 z-0">
-        <Canvas camera={{ position: [0, 1, 5], fov: 60 }}>
+        <Canvas camera={{ position: [0, 1, 5], fov: 20 }}>
           <Suspense fallback={<CanvasLoader />}>
             <ambientLight intensity={0.5} />
             <directionalLight position={[5, 5, 5]} intensity={1.5} />
 
-            <HackerRoom
+            {/*<HackerRoom
               scale={sizes.deskScale}
               position={sizes.deskPosition}
               rotation={[0.1, -Math.PI, 0]}
-            />
+            />*/}
 
             <Target position={sizes.targetPosition} scale={[0.2, 0.2, 0.2]} />
 
@@ -96,8 +101,11 @@ const Hero = () => {
 
             <Rings position={sizes.RingsPosition} scale={[0.2, 0.2, 0.2]} />
 
-            
+            <Character position={sizes.CharacterPosition} scale={[8, 8, 8]} />
+
+        
           </Suspense>
+
         </Canvas>
       </div>
     </section>
