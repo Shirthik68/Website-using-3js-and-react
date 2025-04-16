@@ -5,8 +5,8 @@ import CanvasLoader from "../Components/CanvasLoader";
 //import HackerRoom from "../Components/HackerRoom";
 import Target from '../Components/Target';
 import ReactLogo from "../Components/Reactlogo";
-import Cube from "../Components/Cube";
-import Rings from "../Components/Rings";
+import Aelogo from "../Components/Aelogo";
+import Blender from "../Components/Blender";
 import Character from "../Components/Character";
 
 
@@ -19,7 +19,7 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
       targetPosition: [0, -1.5, 0],
       ReactLogoPosition: [-2, 1, 0],
       CubePosition: [0, 1, 1],
-      RingsPosition: [2, 1, 0],
+      BlenderPosition: [2, 1, 0],
       CharacterPosition: [0, 0, 0]
     };
   } else if (isMobile) {
@@ -29,7 +29,7 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
       targetPosition: [0, -1.5, 0],
       ReactLogoPosition: [-2, 1, 0],
       CubePosition: [0, 1, 1],
-      RingsPosition: [2, 1, 0],
+      BlenderPosition: [2, 1, 0],
       CharacterPosition: [0, 0, 0]
     };
   } else if (isTablet) {
@@ -39,7 +39,7 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
       targetPosition: [0, -1.5, 0],
       ReactLogoPosition: [-2, 1, 0],
       CubePosition: [0, 1, 1],
-      RingsPosition: [2, 1, 0],
+      BlenderPosition: [2, 1, 0],
       CharacterPosition: [0, 0, 0]
     };
   } else {
@@ -49,7 +49,7 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
       targetPosition: [-2, -2, 1],
       ReactLogoPosition: [0, 0, 0],
       CubePosition: [2.5, -1, 1],
-      RingsPosition: [10, 10, 0],
+      BlenderPosition: [-3, 1, 0],
       CharacterPosition: [0, -1, 0]
     };
   }
@@ -82,7 +82,7 @@ const Hero = () => {
 
       {/* 3D Canvas */}
       <div className="w-full h-full absolute inset-0 z-0">
-        <Canvas camera={{ position: [0, 1, 5], fov: 20 }}>
+        <Canvas camera={{ position: [0, 1, 5], fov: 60 }}>
           <Suspense fallback={<CanvasLoader />}>
             <ambientLight intensity={0.5} />
             <directionalLight position={[5, 5, 5]} intensity={1.5} />
@@ -97,9 +97,9 @@ const Hero = () => {
 
             <ReactLogo position={sizes.ReactLogoPosition} scale={[0.3, 0.3, 0.3]} />
 
-            <Cube position={sizes.CubePosition} scale={[0.2, 0.2, 0.2]} />
+            <Aelogo position={sizes.CubePosition} scale={[0.2, 0.2, 0.2]} />
 
-            <Rings position={sizes.RingsPosition} scale={[0.2, 0.2, 0.2]} />
+            <Blender position={sizes.BlenderPosition} scale={[0.15, 0.15, 0.15]} />
 
             <Character position={sizes.CharacterPosition} scale={[8, 8, 8]} />
 
