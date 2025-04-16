@@ -1,7 +1,7 @@
 import { Html, useProgress } from "@react-three/drei";
 
 const CanvasLoader = () => {
-  const { progress } = useProgress();
+  const { progress, errors, loaded } = useProgress();
 
   return (
     <Html
@@ -16,9 +16,24 @@ const CanvasLoader = () => {
         fontWeight: 800,
       }}
     >
-      <span className="canvas-loader" />
+      <div
+        className="canvas-loader"
+        style={{
+          border: "4px solid #fff",
+          borderTop: "4px solid transparent",
+          borderRadius: "50%",
+          width: "40px",
+          height: "40px",
+          animation: "spin 1s linear infinite",
+          marginBottom: 20,
+        }}
+      />
       <p style={{ fontSize: 14, marginTop: 40 }}>
-        {progress !== 0 ? `${progress.toFixed(2)} %` : "Loading..."}
+        {progress !== 0
+          ? `${progress.toFixed(2)} %`
+          : errors.length
+          ? "Error loading assets"
+          : "Loading..."}
       </p>
     </Html>
   );
