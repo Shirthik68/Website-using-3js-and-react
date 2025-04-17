@@ -1,14 +1,17 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useRef, useLayoutEffect, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { useMediaQuery } from "react-responsive";
 import CanvasLoader from "../Components/CanvasLoader";
-//import HackerRoom from "../Components/HackerRoom";
-import Target from '../Components/Target';
+import Target from "../Components/Target";
 import ReactLogo from "../Components/Reactlogo";
 import Aelogo from "../Components/Aelogo";
 import Blender from "../Components/Blender";
 import Character from "../Components/Character";
+import Box from "../Components/Box";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
 
+gsap.registerPlugin(ScrollTrigger);
 
 // Responsive scaling and positioning
 const calculateSizes = (isSmall, isMobile, isTablet) => {
@@ -20,7 +23,8 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
       ReactLogoPosition: [-2, 1, 0],
       CubePosition: [0, 1, 1],
       BlenderPosition: [2, 1, 0],
-      CharacterPosition: [0, 0, 0]
+      CharacterPosition: [0, 0, 0],
+      boxPosition: [0, -3, 0],
     };
   } else if (isMobile) {
     return {
@@ -30,7 +34,8 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
       ReactLogoPosition: [-2, 1, 0],
       CubePosition: [0, 1, 1],
       BlenderPosition: [2, 1, 0],
-      CharacterPosition: [0, 0, 0]
+      CharacterPosition: [0, 0, 0],
+      boxPosition: [0, -3, 0],
     };
   } else if (isTablet) {
     return {
@@ -40,29 +45,58 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
       ReactLogoPosition: [-2, 1, 0],
       CubePosition: [0, 1, 1],
       BlenderPosition: [2, 1, 0],
-      CharacterPosition: [0, 0, 0]
+      CharacterPosition: [0, 0, 0],
+      boxPosition: [0, -3, 0],
     };
   } else {
     return {
       deskScale: 0.07,
       deskPosition: [1, -8, -10],
-      targetPosition: [-2, -2, 1],
-      ReactLogoPosition: [0, 0, 0],
-      CubePosition: [2.5, -1, 1],
-      BlenderPosition: [-3, 1, 0],
-      CharacterPosition: [0, -1, 0]
+      targetPosition: [-1, 0, 1],
+      ReactLogoPosition: [-1.5, 0.5, 0],
+      CubePosition: [1, 0.5, 1],
+      BlenderPosition: [-1.5, 1.5, 0],
+      CharacterPosition: [0, 2.2, 0],
+      boxPosition: [0, -3, 0],
     };
   }
 };
-
 
 const Hero = () => {
   const isSmall = useMediaQuery({ maxWidth: 440 });
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
-
   const sizes = calculateSizes(isSmall, isMobile, isTablet);
 
+
+  // Ref for the 3D object inside Character
+  const characterRef = useRef();
+
+  useLayoutEffect(() => {
+    if (characterRef.current) {
+      gsap.to(characterRef.current.position, {
+        x: 10,
+        y: 5,
+        z: 0,
+        scrollTrigger: {
+          trigger: '#trigger-element',
+          start: 'top center',
+          end: 'bottom center',
+          scrub: true,
+          markers: true,
+        },
+            ease: 'power2.out',
+          });
+        }
+    
+        return () => {
+          ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        };
+      }, [sizes]);
+  
+    // Cleanup the GSAP context on component unmount
+   // Re-run the effect if `sizes` changes
+  
   return (
     <section className="min-h-screen w-full flex flex-col relative text-white">
       {/* Hero Text */}
@@ -80,6 +114,9 @@ const Hero = () => {
         </p>
       </div>
 
+      {/* Trigger Element for GSAP Scroll */}
+      <div id="trigger-element" className="h-[150vh] w-full"></div>
+
       {/* 3D Canvas */}
       <div className="w-full h-full absolute inset-0 z-0">
         <Canvas camera={{ position: [0, 1, 5], fov: 60 }}>
@@ -87,25 +124,22 @@ const Hero = () => {
             <ambientLight intensity={0.5} />
             <directionalLight position={[5, 5, 5]} intensity={1.5} />
 
-            {/*<HackerRoom
-              scale={sizes.deskScale}
-              position={sizes.deskPosition}
-              rotation={[0.1, -Math.PI, 0]}
-            />*/}
-
-            <Target position={sizes.targetPosition} scale={[0.2, 0.2, 0.2]} />
-
+            {/* Existing Objects */}
+            <Target position={sizes.targetPosition} scale={[0.1, 0.1, 0.1]} />
             <ReactLogo position={sizes.ReactLogoPosition} scale={[0.3, 0.3, 0.3]} />
+            <Aelogo position={sizes.CubePosition} scale={[0.1, 0.1, 0.1]} />
+            <Blender position={sizes.BlenderPosition} scale={[0.1, 0.1, 0.1]} />
 
-            <Aelogo position={sizes.CubePosition} scale={[0.2, 0.2, 0.2]} />
+            {/* Character (Move to Box) */}
+            <Character
+              ref={characterRef} // Use ref here for the mesh
+              position={sizes.CharacterPosition}
+              scale={[4, 4, 4]}
+            />
 
-            <Blender position={sizes.BlenderPosition} scale={[0.15, 0.15, 0.15]} />
-
-            <Character position={sizes.CharacterPosition} scale={[8, 8, 8]} />
-
-        
+            {/* Box (Fixed in Position) */}
+            <Box position={sizes.boxPosition} scale={[3, 3, 3]} />
           </Suspense>
-
         </Canvas>
       </div>
     </section>
