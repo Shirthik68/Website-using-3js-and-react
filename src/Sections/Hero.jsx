@@ -10,8 +10,14 @@ import Character from "../Components/Character";
 import Box from "../Components/Box";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import CameraController from "./CameraController";
+import CameraRotator from "./CameraRotator";
+//import { OrbitControls } from "@react-three/drei";
+//import Lenis from 'lenis'
 
 gsap.registerPlugin(ScrollTrigger);
+
+
 
 // Responsive scaling and positioning
 const calculateSizes = (isSmall, isMobile, isTablet) => {
@@ -24,7 +30,7 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
       CubePosition: [0, 1, 1],
       BlenderPosition: [2, 1, 0],
       CharacterPosition: [0, 0, 0],
-      boxPosition: [0, -3, 0],
+      boxPosition: [0, -3.5, 0],
     };
   } else if (isMobile) {
     return {
@@ -52,12 +58,13 @@ const calculateSizes = (isSmall, isMobile, isTablet) => {
     return {
       deskScale: 0.07,
       deskPosition: [1, -8, -10],
-      targetPosition: [-1, 0, 1],
-      ReactLogoPosition: [-1.5, 0.5, 0],
-      CubePosition: [1, 0.5, 1],
-      BlenderPosition: [-1.5, 1.5, 0],
-      CharacterPosition: [0, 2.2, 0],
-      boxPosition: [0, -3, 0],
+      targetPosition: [-1, -1.5, 1],
+      ReactLogoPosition: [-1.5, -1.5, 0],
+      CubePosition: [1, -1, 1],
+      BlenderPosition: [-1.5, 0, 1],
+      CharacterPosition: [0, 2, 0],
+      boxPosition: [0, -2, -1],
+      CameraControllerPosition: [0, -2, 0]
     };
   }
 };
@@ -68,35 +75,10 @@ const Hero = () => {
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
   const sizes = calculateSizes(isSmall, isMobile, isTablet);
 
-
-  // Ref for the 3D object inside Character
   const characterRef = useRef();
 
-  useLayoutEffect(() => {
-    if (characterRef.current) {
-      gsap.to(characterRef.current.position, {
-        x: 10,
-        y: 5,
-        z: 0,
-        scrollTrigger: {
-          trigger: '#trigger-element',
-          start: 'top center',
-          end: 'bottom center',
-          scrub: true,
-          markers: true,
-        },
-            ease: 'power2.out',
-          });
-        }
-    
-        return () => {
-          ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-        };
-      }, [sizes]);
-  
-    // Cleanup the GSAP context on component unmount
-   // Re-run the effect if `sizes` changes
-  
+
+
   return (
     <section className="min-h-screen w-full flex flex-col relative text-white">
       {/* Hero Text */}
@@ -124,6 +106,10 @@ const Hero = () => {
             <ambientLight intensity={0.5} />
             <directionalLight position={[5, 5, 5]} intensity={1.5} />
 
+            <CameraController position={sizes.CameraControllerPosition} characterRef={characterRef} />
+            <CameraRotator />
+            
+
             {/* Existing Objects */}
             <Target position={sizes.targetPosition} scale={[0.1, 0.1, 0.1]} />
             <ReactLogo position={sizes.ReactLogoPosition} scale={[0.3, 0.3, 0.3]} />
@@ -134,7 +120,7 @@ const Hero = () => {
             <Character
               ref={characterRef} // Use ref here for the mesh
               position={sizes.CharacterPosition}
-              scale={[4, 4, 4]}
+              scale={[5, 5, 5]}
             />
 
             {/* Box (Fixed in Position) */}
@@ -145,5 +131,7 @@ const Hero = () => {
     </section>
   );
 };
+
+ // camera movement
 
 export default Hero;

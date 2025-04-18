@@ -7,6 +7,8 @@ import ScrollTrigger from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
+
+
 const Character = forwardRef(({ position = [0, 2, 0], scale = [1, 1, 1] }, ref) => {
   const { scene } = useGLTF('/models/Shirthik web.glb')
   const { camera, pointer } = useThree()
@@ -22,8 +24,8 @@ const Character = forwardRef(({ position = [0, 2, 0], scale = [1, 1, 1] }, ref) 
     // Animate position
     gsap.to(characterGroup.current.position, {
       x: 0,
-      y: -2.9,
-      z: 0,
+      y: -2.3,
+      z: -1.4,
       scrollTrigger: {
         trigger: '#trigger-element',
         start: 'top center',
@@ -36,9 +38,9 @@ const Character = forwardRef(({ position = [0, 2, 0], scale = [1, 1, 1] }, ref) 
   
     // Animate scale
     gsap.to(characterGroup.current.scale, {
-      x: 3,
-      y: 3,
-      z: 3,
+      x: 2.5,
+      y: 2.5,
+      z: 2.5,
       scrollTrigger: {
         trigger: '#trigger-element',
         start: 'top center',
